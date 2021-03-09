@@ -109,6 +109,12 @@ app.get("/statement/date", verifyExistsAccountCPF, (request, response) => {
   return response.json(statement);
 });
 
+app.get("/balance", verifyExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+  const balance = getBalance(customer.statement);
+
+  return response.json(balance);
+});
 app.put("/account", verifyExistsAccountCPF, (request, response) => {
   const { name } = request.body;
   const { customer } = request;
@@ -123,5 +129,13 @@ app.get("/account", verifyExistsAccountCPF, (request, response) => {
 
   return response.json(customer);
 });
+
+app.delete("/account", verifyExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+  customers.splice(customer, 1); // Slice pega um array e seleciona apenas o item até a posição 1
+
+  return response.status(200).json(customers);
+});
+
 
 app.listen(3333);
